@@ -4,17 +4,17 @@ const FEEDS = [
   {
     url: 'https://finanzacafona.it/feed/',
     author: 'Vittorio',
-    img: 'https://example.com/img/vittorio.jpg'
+    img: 'https://saltomentale.github.io/tbtfnews/assets/authors/vittorio.jpg'
   },
   {
     url: 'https://theitalianleathersofa.com/feed/',
     author: 'Nicola',
-    img: 'https://example.com/img/nicola.jpg'
+    img: 'https://saltomentale.github.io/tbtfnews/assets/authors/nicola.jpg'
   },
   {
     url: 'https://saltomentale.it/feed/',
     author: 'Alain',
-    img: 'https://example.com/img/alain.jpg'
+    img: 'https://saltomentale.github.io/tbtfnews/assets/authors/alain.jpg'
   }
 ];
 

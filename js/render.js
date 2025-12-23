@@ -17,7 +17,7 @@ function renderShowNotes() {
 
 function renderPlayer() {
   return state.playerEmbed
-    ? templatePlayer.replace('{{EP_ID}}', state.playerEmbed)
+    ? templatePlayer.replace('{{PLAYER}}', state.playerEmbed)
     : '';
 }
 
