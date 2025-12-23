@@ -1,26 +1,200 @@
+```css
+/* css/ui.css */
+
+/* ---------- Reset / base ---------- */
+* { box-sizing: border-box; }
+html, body { height: 100%; }
 body {
-  font-family: Arial, sans-serif;
-  background: #f0f0f0;
-  padding: 20px;
+  margin: 0;
+  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI",
+               Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  background: #0b0c10;
+  color: #e8eaed;
+  line-height: 1.35;
+}
+
+a { color: inherit; }
+::selection { background: rgba(255,255,255,0.12); }
+
+/* ---------- Layout ---------- */
+:root {
+  --panel: #12131a;
+  --panel-2: #0f1016;
+  --stroke: rgba(255,255,255,0.10);
+  --stroke-2: rgba(255,255,255,0.16);
+  --text-dim: rgba(232,234,237,0.72);
+  --shadow: 0 18px 50px rgba(0,0,0,0.45);
+  --radius: 16px;
+  --radius-sm: 12px;
+  --pad: 16px;
+  --pad-lg: 20px;
+}
+
+body {
+  padding: 22px;
+}
+
+h1 {
+  margin: 0 0 14px 0;
+  font-size: 20px;
+  letter-spacing: 0.2px;
+  font-weight: 700;
+}
+
+h2 {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  font-weight: 650;
+  letter-spacing: 0.15px;
+  color: rgba(232,234,237,0.92);
 }
 
 section {
-  background: #fff;
-  padding: 15px;
-  margin-bottom: 20px;
+  background: linear-gradient(180deg, var(--panel), var(--panel-2));
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius);
+  padding: var(--pad-lg);
+  margin: 14px 0;
+  box-shadow: var(--shadow);
+}
+
+section:first-of-type {
+  margin-top: 10px;
+}
+
+/* ---------- Controls ---------- */
+input, textarea, button {
+  font: inherit;
+}
+
+input, textarea {
+  width: 100%;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--stroke);
+  color: #e8eaed;
+  border-radius: var(--radius-sm);
+  padding: 0px;
+  outline: none;
+  transition: border-color 140ms ease, background 140ms ease, box-shadow 140ms ease;
+}
+
+input::placeholder, textarea::placeholder {
+  color: rgba(232,234,237,0.40);
+  padding: 10px;
+}
+
+input:focus, textarea:focus {
+  border-color: rgba(255,255,255,0.22);
+  background: rgba(255,255,255,0.05);
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.06);
 }
 
 textarea {
-  width: 100%;
-  min-height: 120px;
-}
-
-input {
-  width: 100%;
-  margin-bottom: 10px;
+  min-height: 140px;
+  resize: vertical;
 }
 
 #output {
-  min-height: 300px;
-  font-family: monospace;
+  min-height: 340px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+               "Liberation Mono", "Courier New", monospace;
+  font-size: 12.5px;
+  line-height: 1.45;
 }
+
+/* ---------- Buttons ---------- */
+button {
+  appearance: none;
+  border: 1px solid var(--stroke-2);
+  background: rgba(255,255,255,0.06);
+  color: #e8eaed;
+  padding: 10px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease, opacity 120ms ease;
+}
+
+button:hover {
+  background: rgba(255,255,255,0.09);
+  border-color: rgba(255,255,255,0.22);
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Make the "primary" action look slightly stronger:
+   (targets your existing build button by id) */
+#build {
+  background: rgba(255,255,255,0.10);
+  border-color: rgba(255,255,255,0.26);
+}
+
+#build:hover {
+  background: rgba(255,255,255,0.14);
+}
+
+/* ---------- Spacing inside sections ---------- */
+section > input,
+section > textarea,
+section > button,
+section > div {
+  margin-top: 10px;
+}
+
+/* ---------- Blogs preview ---------- */
+#blogsPreview {
+  margin-top: 12px;
+  display: grid;
+  gap: 10px;
+}
+
+#blogsPreview > div {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--stroke);
+  border-radius: 14px;
+  padding: 12px;
+}
+
+#blogsPreview img {
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+#blogsPreview a {
+  text-decoration: none;
+}
+
+#blogsPreview a:hover strong {
+  text-decoration: underline;
+}
+
+#blogsPreview small {
+  color: var(--text-dim);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 720px) {
+  body { padding: 14px; }
+  section { padding: 14px; border-radius: 14px; }
+  h1 { font-size: 18px; }
+  textarea { min-height: 130px; }
+}
+
+/* ---------- Optional: subtle page frame ---------- */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(900px 500px at 20% 10%, rgba(255,255,255,0.06), transparent 55%),
+    radial-gradient(700px 450px at 85% 20%, rgba(255,255,255,0.05), transparent 55%),
+    radial-gradient(900px 700px at 60% 90%, rgba(255,255,255,0.04), transparent 60%);
+  opacity: 1;
+}
+```
