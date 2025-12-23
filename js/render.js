@@ -38,9 +38,12 @@ function renderBlogs() {
                  style="font-weight:bold;text-decoration:none;color:#000;">
                 ${p.title}
               </a>
-              <p style="margin:6px 0 0 0;font-size:12px;line-height:1.4;">
-                ${truncate(p.excerpt)}
-              </p>
+              <p style="margin:6px 0 0 0;
+                      font-size:13px;
+                      line-height:1.5;
+                      color:#555555;">
+              ${truncate(p.excerpt)}
+            </p>
             </td>
           </tr>
         </table>
