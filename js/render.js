@@ -34,16 +34,24 @@ function renderBlogs() {
                    style="border-radius:50%;display:block;">
             </td>
             <td style="padding-left:10px;font-family:Arial,sans-serif;font-size:13px;">
-              <a href="${p.link}"
-                 style="font-weight:bold;text-decoration:none;color:#000;">
-                ${p.title}
-              </a>
-              <p style="margin:6px 0 0 0;
-                      font-size:13px;
-                      line-height:1.5;
-                      color:#555555;">
-              ${truncate(p.excerpt)}
-            </p>
+              <div style="font-family:Arial,Helvetica,sans-serif;">
+                <a href="${p.link}"
+                   style="display:block;
+                          font-weight:700;
+                          font-size:13px;
+                          line-height:1.3;
+                          color:#000000;
+                          text-decoration:underline;">
+                  ${p.title}
+                </a>
+
+                <div style="margin-top:4px;
+                            font-size:12.5px;
+                            line-height:1.45;
+                            color:#555555;">
+                  ${truncate(p.excerpt)}
+                </div>
+              </div>
             </td>
           </tr>
         </table>
