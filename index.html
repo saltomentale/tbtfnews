@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Podcast Newsletter Builder</title>
+  <link rel="stylesheet" href="css/ui.css">
+</head>
+<body>
+
+<h1>Newsletter Builder</h1>
+
+<section>
+  <button id="loadEpisode">Carica ultima puntata dal feed</button>
+</section>
+
+<section>
+  <h2>Show Notes (HTML)</h2>
+  <textarea id="showNotes"></textarea>
+</section>
+
+<section>
+  <h2>Player Embed (HTML)</h2>
+  <textarea id="playerEmbed"></textarea>
+</section>
+
+<section>
+  <h2>Post dai Blog (ultimi 7 giorni)</h2>
+  <button id="loadBlogs">Carica RSS</button>
+  <div id="blogsPreview"></div>
+</section>
+
+<section>
+  <h2>Mini-post esclusivo</h2>
+  <input id="miniTitle" placeholder="Titolo">
+  <textarea id="miniBody"></textarea>
+</section>
+
+<section>
+  <h2>Slides PDF</h2>
+  <input id="slidesPdf" placeholder="URL PDF">
+  <input id="slidesImg" placeholder="URL immagine">
+</section>
+
+<section>
+  <h2>HTML Finale</h2>
+  <button id="build">Genera HTML</button>
+  <textarea id="output" readonly></textarea>
+</section>
+
+<script src="js/state.js"></script>
+<script src="js/rss.js"></script>
+<script src="js/render.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
