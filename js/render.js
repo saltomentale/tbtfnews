@@ -63,7 +63,6 @@ function renderSlides() {
   if (!state.slides.pdf) return '';
   return templateSlides
     .replace('{{PDF}}', state.slides.pdf)
-    .replace('{{IMG}}', state.slides.img);
 }
 
 function renderBlogsPreview() {

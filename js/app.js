@@ -23,7 +23,6 @@ document.getElementById('build').onclick = () => {
   state.miniPost.title = miniTitle.value;
   state.miniPost.body = miniBody.value;
   state.slides.pdf = slidesPdf.value;
-  state.slides.img = slidesImg.value;
 
   const html = templateShell
     .replace('{{EP_TITLE}}', state.episode.title)
