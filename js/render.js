@@ -45,7 +45,7 @@ function renderBlogs() {
                   ${p.title}
                 </a>
 
-                <div style="margin-top:4px;
+                <div style="margin-top:0px;
                             font-size:12.5px;
                             line-height:1.45;
                             color:#555555;">
