@@ -27,6 +27,7 @@ document.getElementById('build').onclick = () => {
   const html = templateShell
     .replace('{{EP_TITLE}}', state.episode.title)
     .replace('{{EP_LINK}}', state.episode.link)
+    .replace('{{EP_IMAGE}}', state.episode.image)
     .replace('{{PLAYER}}', renderPlayer())
     .replace('{{SHOW_NOTES}}', renderShowNotes())
     .replace('{{MINI_POST}}', renderMiniPost())

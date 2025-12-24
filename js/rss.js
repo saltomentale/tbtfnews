@@ -63,6 +63,9 @@ async function loadLatestEpisode() {
   state.episode.title = ep.title || '';
   state.episode.description = ep.description || '';
   state.episode.link = ep.link || '';
+  state.episode.image = (ep.itunes_image && ep.itunes_image.href) ||
+                        (ep.enclosure && ep.enclosure.link) ||
+                        '';
 
   state.showNotes = state.episode.description;
 

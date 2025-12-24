@@ -3,7 +3,8 @@ window.state = {
     id: '',
     title: '',
     description: '',
-    link: ''
+    link: '',
+    image: ''
   },
   showNotes: '',
   playerEmbed: '',
