@@ -12,7 +12,6 @@ window.state = {
     }
   },
   showNotes: '',
-  playerEmbed: '',
   blogs: [],
   miniPost: {
     title: '',
