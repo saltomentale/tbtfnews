@@ -8,7 +8,6 @@ let templateShell,
 (async function init() {
   templateShell = await loadTemplate('shell');
   templateShowNotes = await loadTemplate('show-notes');
-  templatePlayer = await loadTemplate('player');
   templateBlogs = await loadTemplate('blogs');
   templateMiniPost = await loadTemplate('mini-post');
   templateSlides = await loadTemplate('slides');

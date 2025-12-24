@@ -65,8 +65,6 @@ async function loadLatestEpisode() {
   state.episode.link = ep.link || '';
   state.episode.image = (ep.enclosure && ep.enclosure.image) || '';
 
-  console.log(state.episode.image)
-
   state.episode.links.spotify = "https://open.spotify.com/show/6beSNv77mWZ0oL9LdW3JLp";
   state.episode.links.apple   = "https://podcasts.apple.com/it/podcast/too-big-to-fail/id1746169285";
   state.episode.links.acast   = state.episode.link;
