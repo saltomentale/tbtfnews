@@ -63,17 +63,15 @@ async function loadLatestEpisode() {
   state.episode.title = ep.title || '';
   state.episode.description = ep.description || '';
   state.episode.link = ep.link || '';
-  state.episode.image = (ep.itunes_image && ep.itunes_image.href) ||
-                        (ep.enclosure && ep.enclosure.link) ||
-                        '';
+  state.episode.image = (ep.enclosure && ep.enclosure.image) || '';
 
+  console.log(state.episode.image)
+
+  state.episode.links.spotify = "https://open.spotify.com/show/6beSNv77mWZ0oL9LdW3JLp";
+  state.episode.links.apple   = "https://podcasts.apple.com/it/podcast/too-big-to-fail/id1746169285";
+  state.episode.links.acast   = state.episode.link;
   state.showNotes = state.episode.description;
 
-  state.playerEmbed = `
-<iframe src="https://embed.acast.com/663e29e5cede820013fbb1a2/${state.episode.id}"
-frameBorder="0" width="100%" height="190px"></iframe>
-  `.trim();
-
   document.getElementById('showNotes').value = state.showNotes;
-  document.getElementById('playerEmbed').value = state.playerEmbed;
+  renderEpisodePreview();
 }

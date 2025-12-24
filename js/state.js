@@ -3,8 +3,13 @@ window.state = {
     id: '',
     title: '',
     description: '',
-    link: '',
-    image: ''
+    link: '', // FIXME: REMOVE
+    image: '',
+    links: {
+      spotify: '',
+      apple: '',
+      acast: ''
+    }
   },
   showNotes: '',
   playerEmbed: '',

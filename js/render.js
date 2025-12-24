@@ -15,11 +15,51 @@ function renderShowNotes() {
     : '';
 }
 
-function renderPlayer() {
-  return state.playerEmbed
-    ? templatePlayer.replace('{{PLAYER}}', state.playerEmbed)
-    : '';
+function renderEpisodeCard() {
+  if (!state.episode.title) return '';
+
+  return templateEpisodeCard
+    .replace('{{EP_IMAGE}}', state.episode.image)
+    .replace('{{EP_TITLE}}', state.episode.title)
+    .replace('{{SPOTIFY}}', state.episode.links.spotify)
+    .replace('{{APPLE}}', state.episode.links.apple)
+    .replace('{{ACAST}}', state.episode.links.acast);
 }
+
+function renderEpisodePreview() {
+  const container = document.getElementById('episodePreview');
+  if (!container) return;
+
+  if (!state.episode.title) {
+    container.innerHTML = '<p>Nessuna puntata caricata.</p>';
+    return;
+  }
+
+  container.innerHTML = `
+    <div style="
+      display:flex;
+      gap:16px;
+      align-items:center;
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.12);
+      border-radius:14px;
+      padding:16px;
+    ">
+      <img src="${state.episode.image}"
+           width="96"
+           style="border-radius:12px;border:1px solid rgba(255,255,255,0.2);">
+
+      <div>
+        <strong style="font-size:15px;">${state.episode.title}</strong>
+        <div style="margin-top:8px;font-size:13px;opacity:.8;">
+          Ascoltala su:
+          Spotify · Apple Podcast · Acast
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 
 function renderBlogs() {
   if (!state.blogs.length) return '';
