@@ -37,15 +37,30 @@
 
 <section>
   <h2>Mini-post esclusivo</h2>
-  <input id="miniTitle" placeholder="Titolo">
-  <textarea id="miniBody"></textarea>
+
+  <input id="miniTitle" placeholder="Titolo" style="padding:12px;">
+
+  <div id="miniEditor"
+       contenteditable="true"
+       style="
+         min-height:140px;
+         padding:12px;
+         background:rgba(255,255,255,0.03);
+         border:1px solid rgba(255,255,255,0.12);
+         border-radius:12px;
+       ">
+    <p></p>
+  </div>
+
+  <small style="opacity:.6;">
+    Testo formattabile (link, grassetto, paragrafi).
+  </small>
 </section>
 
-<!-- CTA -->
 <section>
   <h2>Call To Action finali</h2>
 
-  <input id="ctaTitle" value="Se sei arrivato fin qui">
+  <input id="ctaTitle" value="Se sei arrivato fin qui" style="padding:12px;">
   
   <div style="margin-bottom:8px;">
     <button type="button" id="ctaLink">Inserisci link</button>

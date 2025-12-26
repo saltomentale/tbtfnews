@@ -25,7 +25,7 @@ document.getElementById('loadEpisode').onclick = loadLatestEpisode;
 document.getElementById('build').onclick = () => {
   state.showNotes = showNotes.value;
   state.miniPost.title = miniTitle.value;
-  state.miniPost.body = miniBody.value;
+  state.miniPost.body = miniEditor.innerHTML;
   state.slides.pdf = slidesPdf.value;
   state.cta.title = ctaTitle.value;
   state.cta.text = ctaEditor.innerHTML;

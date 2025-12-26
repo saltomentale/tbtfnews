@@ -113,7 +113,7 @@ function renderMiniPost() {
   if (!state.miniPost.title) return '';
   return templateMiniPost
     .replace('{{TITLE}}', state.miniPost.title)
-    .replace('{{BODY}}', state.miniPost.body);
+    .replace('{{BODY}}', normalizeRichText(state.miniPost.body));
 }
 
 function renderSlides() {
@@ -122,7 +122,7 @@ function renderSlides() {
     .replace('{{PDF}}', state.slides.pdf)
 }
 
-function normalizeCTA(html) {
+function normalizeRichText(html) {
   if (!html) return '';
   return html
     .replace(/<div>/gi, '<p>')
@@ -134,7 +134,7 @@ function renderCTA() {
 
   return templateCTA
     .replace('{{CTA_TITLE}}', state.cta.title)
-    .replace('{{CTA_TEXT}}', normalizeCTA(state.cta.text))
+    .replace('{{CTA_TEXT}}', normalizeRichText(state.cta.text))
 }
 
 function renderBlogsPreview() {
