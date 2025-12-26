@@ -116,6 +116,21 @@ function renderSlides() {
     .replace('{{PDF}}', state.slides.pdf)
 }
 
+function normalizeCTA(html) {
+  if (!html) return '';
+  return html
+    .replace(/<div>/gi, '<p>')
+    .replace(/<\/div>/gi, '</p>');
+}
+
+function renderCTA() {
+  if (!state.cta.title || !state.cta.text) return '';
+
+  return templateCTA
+    .replace('{{CTA_TITLE}}', state.cta.title)
+    .replace('{{CTA_TEXT}}', normalizeCTA(state.cta.text))
+}
+
 function renderBlogsPreview() {
   const container = document.getElementById('blogsPreview');
   container.innerHTML = '';

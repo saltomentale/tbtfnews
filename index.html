@@ -25,6 +25,11 @@
 </section>
 
 <section>
+  <h2>Slides PDF</h2>
+  <input id="slidesPdf" placeholder="URL PDF">
+</section>
+
+<section>
   <h2>Post dai Blog (ultimi 7 giorni)</h2>
   <button id="loadBlogs">Carica RSS</button>
   <div id="blogsPreview"></div>
@@ -36,9 +41,30 @@
   <textarea id="miniBody"></textarea>
 </section>
 
+<!-- CTA -->
 <section>
-  <h2>Slides PDF</h2>
-  <input id="slidesPdf" placeholder="URL PDF">
+  <h2>Call To Action finali</h2>
+
+  <input id="ctaTitle" value="Se sei arrivato fin qui">
+  
+  <div style="margin-bottom:8px;">
+    <button type="button" id="ctaLink">Inserisci link</button>
+  </div>
+  <div id="ctaEditor"
+       contenteditable="true"
+       style="
+         min-height:120px;
+         padding:12px;
+         background:rgba(255,255,255,0.03);
+         border:1px solid rgba(255,255,255,0.12);
+         border-radius:12px;
+       ">
+    <p>Già il fatto che ci ascolti e ci leggi è pazzesco. Grazie.</p><p>Se vuoi fare ancora di più, puoi <a href="https://open.spotify.com/show/6beSNv77mWZ0oL9LdW3JLp"><b>condividere il podcast</b></a> o inoltrare questa newsletter.</p><p>Se poi un giorno vorrai <a href="http://toobigtofail.it/shop"><b>comprarci del merch</b></a> o <a href="https://ko-fi.com/toobigtofail"><b>offrirci un caffè</b></a>, promettiamo di ricordarcelo nell’aldilà.</p>
+  </div>
+
+  <small style="opacity:.6;">
+    Testo formattabile (link, grassetto, paragrafi).
+  </small>
 </section>
 
 <section>

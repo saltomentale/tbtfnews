@@ -17,6 +17,10 @@ window.state = {
     title: '',
     body: ''
   },
+  cta: {
+    title: '',
+    text: ''
+  },
   slides: {
     pdf: '',
     img: ''

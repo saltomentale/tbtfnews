@@ -61,7 +61,7 @@ async function loadLatestEpisode() {
 
   state.episode.id = ep.guid || ep.acast_episodeId || '';
   state.episode.title = ep.title || '';
-  state.episode.description = ep.description || '';
+  state.episode.description = cleanShowNotes(ep.description || '');
   state.episode.link = ep.link || '';
   state.episode.image = (ep.enclosure && ep.enclosure.image) || '';
 
@@ -72,4 +72,23 @@ async function loadLatestEpisode() {
 
   document.getElementById('showNotes').value = state.showNotes;
   renderEpisodePreview();
+}
+
+function cleanShowNotes(html) {
+  if (!html) return '';
+
+  let out = html;
+
+  // 1. rimuovi tutti i <br>
+  out = out.replace(/<br\s*\/?>/gi, '');
+
+  // 2. tronca tutto dopo la CTA TooBiggie
+  const marker = '🫵 TooBiggie, abbiamo bisogno di te:';
+  const idx = out.indexOf(marker);
+
+  if (idx !== -1) {
+    out = out.substring(0, idx);
+  }
+
+  return out.trim();
 }
