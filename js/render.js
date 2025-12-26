@@ -1,7 +1,10 @@
 function truncate(text, limit = 120) {
-  if (!text) return '';
-  if (text.length <= limit) return text;
-  return text.substring(0, limit) + '...';
+  var result = ""
+  if (!text) result = '';
+  if (text.length <= limit) result = text;
+  result = text.substring(0, limit) + '...';
+
+  return result;
 }
 
 async function loadTemplate(name) {
@@ -66,7 +69,7 @@ function renderBlogs() {
 
   const items = state.blogs.map(p => `
     <tr>
-      <td style="padding:10px 0;">
+      <td style="padding:20px 0;">
         <table width="100%" cellpadding="0" cellspacing="0">
           <tr>
             <td width="48" valign="top">
@@ -78,17 +81,20 @@ function renderBlogs() {
                 <a href="${p.link}"
                    style="display:block;
                           font-weight:700;
-                          font-size:13px;
+                          font-size:17px;
                           line-height:1.3;
                           color:#000000;
                           text-decoration:underline;">
                   ${p.title}
                 </a>
 
-                <div style="margin-top:0px;
-                            font-size:12.5px;
+                <div class="blog-post" style="margin-top: 0px;
+                            font-size:15px;
                             line-height:1.45;
-                            color:#555555;">
+                            color:#555555;
+                            margin-block-start: 0px !important;
+                            margin-block-end: 0px !important;
+                            ">
                   ${truncate(p.excerpt)}
                 </div>
               </div>
