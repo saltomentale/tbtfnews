@@ -71,6 +71,18 @@ async function loadLatestEpisode() {
   state.showNotes = state.episode.description;
 
   document.getElementById('showNotes').value = state.showNotes;
+
+  const promo = extractPromo(ep.description || '');
+  if (promo.text || promo.cta) {
+    state.sponsor.text = promo.text;
+    state.sponsor.cta = promo.cta;
+
+    const sponsorText = document.getElementById('sponsorText');
+    const sponsorCta = document.getElementById('sponsorCta');
+    if (sponsorText) sponsorText.value = promo.text;
+    if (sponsorCta) sponsorCta.value = promo.cta;
+  }
+
   renderEpisodePreview();
 }
 
@@ -91,4 +103,35 @@ function cleanShowNotes(html) {
   }
 
   return out.trim();
+}
+
+function extractPromo(html) {
+  if (!html) return { text: '', cta: '' };
+
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  const promoStrong = Array.from(doc.querySelectorAll('strong'))
+    .find(el => /LA PROMO/i.test(el.textContent || ''));
+
+  if (!promoStrong) return { text: '', cta: '' };
+
+  let promoParagraph = promoStrong.closest('p');
+  if (promoParagraph && promoParagraph.nextElementSibling) {
+    promoParagraph = promoParagraph.nextElementSibling;
+  }
+
+  if (!promoParagraph || promoParagraph.tagName !== 'P') {
+    return { text: '', cta: '' };
+  }
+
+  const link = promoParagraph.querySelector('a');
+  const cta = link ? link.getAttribute('href') || '' : '';
+
+  const clone = promoParagraph.cloneNode(true);
+  clone.querySelectorAll('a').forEach(a => {
+    const textNode = doc.createTextNode(a.textContent || '');
+    a.replaceWith(textNode);
+  });
+
+  const text = (clone.textContent || '').trim();
+  return { text, cta };
 }
