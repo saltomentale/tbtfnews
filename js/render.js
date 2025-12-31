@@ -130,11 +130,12 @@ function normalizeRichText(html) {
 }
 
 function renderCTA() {
-  if (!state.cta.title || !state.cta.text) return '';
+  const title = 'Se sei arrivato fin qui';
+  const text = 'Grazie! Se ti va, puoi <a href="https://open.spotify.com/show/6beSNv77mWZ0oL9LdW3JLp">condividere il podcast</a> con chi potrebbe apprezzarlo.';
 
   return templateCTA
-    .replace('{{CTA_TITLE}}', state.cta.title)
-    .replace('{{CTA_TEXT}}', normalizeRichText(state.cta.text))
+    .replace('{{CTA_TITLE}}', title)
+    .replace('{{CTA_TEXT}}', text)
 }
 
 function renderBlogsPreview() {

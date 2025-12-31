@@ -27,8 +27,6 @@ document.getElementById('build').onclick = () => {
   state.miniPost.title = miniTitle.value;
   state.miniPost.body = miniEditor.innerHTML;
   state.slides.pdf = slidesPdf.value;
-  state.cta.title = ctaTitle.value;
-  state.cta.text = ctaEditor.innerHTML;
 
   const html = templateShell
     .replace('{{EPISODE_CARD}}', renderEpisodeCard())
@@ -39,11 +37,4 @@ document.getElementById('build').onclick = () => {
     .replace('{{SLIDES}}', renderSlides());
 
   output.value = html;
-};
-
-document.getElementById('ctaLink').onclick = () => {
-  const url = prompt('Inserisci URL del link');
-  if (!url) return;
-
-  document.execCommand('createLink', false, url);
 };
