@@ -122,6 +122,15 @@ function renderSlides() {
     .replace('{{PDF}}', state.slides.pdf)
 }
 
+function renderSponsor() {
+  if (!state.sponsor.text || !state.sponsor.cta) return '';
+
+  const text = state.sponsor.text.replace(/\n/g, '<br>');
+  return templateSponsor
+    .replace('{{SPONSOR_TEXT}}', text)
+    .replace('{{SPONSOR_CTA}}', state.sponsor.cta);
+}
+
 function normalizeRichText(html) {
   if (!html) return '';
   return html

@@ -17,6 +17,10 @@ window.state = {
     title: '',
     body: ''
   },
+  sponsor: {
+    text: '',
+    cta: ''
+  },
   slides: {
     pdf: '',
     img: ''
