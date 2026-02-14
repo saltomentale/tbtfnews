@@ -119,7 +119,7 @@ function renderMiniPost() {
 function renderSlides() {
   if (!state.slides.pdf) return '';
   return templateSlides
-    .replace('{{PDF}}', state.slides.pdf)
+    .replaceAll('{{PDF}}', state.slides.pdf)
 }
 
 function renderSponsor() {
