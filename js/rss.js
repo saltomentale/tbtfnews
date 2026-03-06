@@ -81,6 +81,7 @@ async function loadBlogs() {
     data.items.forEach(item => {
       const date = new Date(item.pubDate);
       const diff = (now - date) / (1000 * 60 * 60 * 24);
+      console.log(feed, item.title, date, diff);
 
       if (diff <= 7) {
         allPosts.push({
@@ -88,11 +89,15 @@ async function loadBlogs() {
           link: item.link,
           excerpt: item.description,
           author: feed.author,
-          img: feed.img
+          img: feed.img,
+          date: date // Store date for sorting
         });
       }
     });
   }
+
+  // Sort by date from newer to older
+  allPosts.sort((a, b) => b.date - a.date);
 
   state.blogs = allPosts.slice(0, 6);
   renderBlogsPreview();
