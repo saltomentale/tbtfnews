@@ -88,6 +88,14 @@ function renderBlogs() {
                   ${p.title}
                 </a>
 
+                <div style="margin-top: 2px;
+                            margin-bottom: 4px;
+                            font-size: 14px;
+                            color: #888888;
+                            font-style: italic;">
+                  ${p.date ? p.date.toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' }) : ''}
+                </div>
+
                 <div class="blog-post" style="margin-top: 0px;
                             font-size:15px;
                             line-height:1.45;
@@ -157,7 +165,10 @@ function renderBlogsPreview() {
       <div>
         <a href="${post.link}" target="_blank">
           <strong>${post.title}</strong>
-        </a><br>
+        </a>
+        <div style="margin-top:2px; margin-bottom:4px; font-size:12px; color:#888888; font-style:italic;">
+          ${post.date ? post.date.toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' }) : ''}
+        </div>
         <small>${truncate(post.excerpt)}</small>
       </div>
     `;
