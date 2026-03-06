@@ -34,15 +34,37 @@ async function fetchRssAsJson(rssUrl) {
       const parser = new DOMParser();
       const xml = parser.parseFromString(text, 'text/xml');
       
-      const items = Array.from(xml.querySelectorAll('item')).map(item => {
+      const nodes = Array.from(xml.querySelectorAll('item, entry'));
+      const items = nodes.map(item => {
+        const isAtom = item.tagName.toLowerCase() === 'entry';
+        
         const title = item.querySelector('title')?.textContent || '';
-        const link = item.querySelector('link')?.textContent || '';
+        
+        // Link handling
+        let link = '';
+        if (isAtom) {
+          const linkEl = item.querySelector('link[rel="alternate"]') || item.querySelector('link');
+          link = linkEl ? linkEl.getAttribute('href') || '' : '';
+        } else {
+          link = item.querySelector('link')?.textContent || '';
+        }
         
         // Handle content vs description
-        const encodedContent = item.getElementsByTagNameNS('*', 'encoded')[0]?.textContent;
-        const description = encodedContent || item.querySelector('description')?.textContent || '';
-        const pubDate = item.querySelector('pubDate')?.textContent || '';
-        const guid = item.querySelector('guid')?.textContent || '';
+        let description = '';
+        if (isAtom) {
+          description = item.querySelector('content')?.textContent || item.querySelector('summary')?.textContent || '';
+        } else {
+          const encodedContent = item.getElementsByTagNameNS('*', 'encoded')[0]?.textContent;
+          description = encodedContent || item.querySelector('description')?.textContent || '';
+        }
+        
+        // Publication date
+        const dateNode = isAtom ? (item.querySelector('published') || item.querySelector('updated')) : item.querySelector('pubDate');
+        const pubDate = dateNode?.textContent || '';
+        
+        // Guid/id
+        const _guid = isAtom ? item.querySelector('id') : item.querySelector('guid');
+        const guid = _guid?.textContent || '';
         
         // Podcast parsing specifics
         const acast_episodeId = item.getElementsByTagNameNS('*', 'episodeId')[0]?.textContent || '';
