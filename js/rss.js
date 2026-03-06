@@ -19,19 +19,7 @@ const FEEDS = [
 ];
 
 async function fetchRssAsJson(rssUrl) {
-  // Option 1: Try rss2json API first (if it's back online)
-  try {
-    const api = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
-    const res = await fetch(api);
-    if (res.ok) {
-      const data = await res.json();
-      if (data.status === 'ok') return data;
-    }
-  } catch (e) {
-    console.warn("rss2json failed, trying fallback...", e);
-  }
-
-  // Option 2: Fallback to fetching raw XML via CORS proxies
+  // Fetch raw XML via CORS proxies and parse locally to avoid external service outages
   const proxies = [
     `https://corsproxy.io/?${encodeURIComponent(rssUrl)}`,
     `https://api.allorigins.win/raw?url=${encodeURIComponent(rssUrl)}`
