@@ -18,14 +18,77 @@ const FEEDS = [
   }
 ];
 
+async function fetchRssAsJson(rssUrl) {
+  // Option 1: Try rss2json API first (if it's back online)
+  try {
+    const api = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
+    const res = await fetch(api);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.status === 'ok') return data;
+    }
+  } catch (e) {
+    console.warn("rss2json failed, trying fallback...", e);
+  }
+
+  // Option 2: Fallback to fetching raw XML via CORS proxies
+  const proxies = [
+    `https://corsproxy.io/?${encodeURIComponent(rssUrl)}`,
+    `https://api.allorigins.win/raw?url=${encodeURIComponent(rssUrl)}`
+  ];
+
+  for (const proxy of proxies) {
+    try {
+      const res = await fetch(proxy);
+      if (!res.ok) continue;
+      
+      const text = await res.text();
+      const parser = new DOMParser();
+      const xml = parser.parseFromString(text, 'text/xml');
+      
+      const items = Array.from(xml.querySelectorAll('item')).map(item => {
+        const title = item.querySelector('title')?.textContent || '';
+        const link = item.querySelector('link')?.textContent || '';
+        
+        // Handle content vs description
+        const encodedContent = item.getElementsByTagNameNS('*', 'encoded')[0]?.textContent;
+        const description = encodedContent || item.querySelector('description')?.textContent || '';
+        const pubDate = item.querySelector('pubDate')?.textContent || '';
+        const guid = item.querySelector('guid')?.textContent || '';
+        
+        // Podcast parsing specifics
+        const acast_episodeId = item.getElementsByTagNameNS('*', 'episodeId')[0]?.textContent || '';
+        const enclosureEl = item.querySelector('enclosure');
+        
+        // rss2json maps itunes:image to enclosure.image
+        const itunesImage = item.getElementsByTagNameNS('*', 'image')[0]?.getAttribute('href') || '';
+        
+        const enclosure = enclosureEl ? {
+          link: enclosureEl.getAttribute('url') || '',
+          type: enclosureEl.getAttribute('type') || '',
+          image: itunesImage
+        } : (itunesImage ? { image: itunesImage } : null);
+
+        return { title, link, description, pubDate, guid, acast_episodeId, enclosure };
+      });
+
+      return { items };
+    } catch (e) {
+      console.warn(`Proxy ${proxy} failed`, e);
+    }
+  }
+
+  console.error("All RSS fetch attempts failed for", rssUrl);
+  return { items: [] };
+}
+
 async function loadBlogs() {
   const allPosts = [];
   const now = new Date();
 
   for (const feed of FEEDS) {
-    const api = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.url)}`;
-    const res = await fetch(api);
-    const data = await res.json();
+    const data = await fetchRssAsJson(feed.url);
+    if (!data || !data.items) continue;
 
     data.items.forEach(item => {
       const date = new Date(item.pubDate);
@@ -51,11 +114,9 @@ async function loadBlogs() {
 const EPISODE_FEED = 'https://feeds.acast.com/public/shows/too-big-to-fail';
 
 async function loadLatestEpisode() {
-  const url = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(EPISODE_FEED)}`;
-  const res = await fetch(url);
-  const data = await res.json();
+  const data = await fetchRssAsJson(EPISODE_FEED);
 
-  if (!data.items || !data.items.length) return;
+  if (!data || !data.items || !data.items.length) return;
 
   const ep = data.items[0];
 
