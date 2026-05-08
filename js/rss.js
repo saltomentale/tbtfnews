@@ -20,17 +20,33 @@ const FEEDS = [
 
 async function fetchRssAsJson(rssUrl) {
   // Fetch raw XML via CORS proxies and parse locally to avoid external service outages
+  // allorigins /get wraps the body in JSON and reliably sends CORS headers (unlike /raw)
+  // codetabs is a raw proxy with no size limit issues
   const proxies = [
-    `https://corsproxy.io/?${encodeURIComponent(rssUrl)}`,
-    `https://api.allorigins.win/raw?url=${encodeURIComponent(rssUrl)}`
+    {
+      url: `https://api.allorigins.win/get?url=${encodeURIComponent(rssUrl)}`,
+      getText: async (res) => (await res.json()).contents
+    },
+    {
+      url: `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(rssUrl)}`,
+      getText: (res) => res.text()
+    },
+    {
+      url: `https://corsproxy.io/?${encodeURIComponent(rssUrl)}`,
+      getText: (res) => res.text()
+    },
+    {
+      url: `https://api.allorigins.win/raw?url=${encodeURIComponent(rssUrl)}`,
+      getText: (res) => res.text()
+    },
   ];
 
   for (const proxy of proxies) {
     try {
-      const res = await fetch(proxy);
+      const res = await fetch(proxy.url);
       if (!res.ok) continue;
       
-      const text = await res.text();
+      const text = await proxy.getText(res);
       const parser = new DOMParser();
       const xml = parser.parseFromString(text, 'text/xml');
       
@@ -84,7 +100,7 @@ async function fetchRssAsJson(rssUrl) {
 
       return { items };
     } catch (e) {
-      console.warn(`Proxy ${proxy} failed`, e);
+      console.warn(`Proxy ${proxy.url} failed`, e);
     }
   }
 
@@ -129,11 +145,24 @@ async function loadBlogs() {
 const EPISODE_FEED = 'https://feeds.acast.com/public/shows/too-big-to-fail';
 
 async function loadLatestEpisode() {
-  const data = await fetchRssAsJson(EPISODE_FEED);
+  // Prefer the pre-fetched static file committed by GitHub Actions (no CORS needed).
+  // Fall back to the proxy chain only if the file is missing or empty.
+  let ep = null;
+  try {
+    const res = await fetch('data/episode.json');
+    if (res.ok) {
+      const cached = await res.json();
+      if (cached && cached.title) ep = cached;
+    }
+  } catch (e) {
+    console.warn('Could not load data/episode.json, falling back to proxy', e);
+  }
 
-  if (!data || !data.items || !data.items.length) return;
-
-  const ep = data.items[0];
+  if (!ep) {
+    const data = await fetchRssAsJson(EPISODE_FEED);
+    if (!data || !data.items || !data.items.length) return;
+    ep = data.items[0];
+  }
 
   state.episode.id = ep.guid || ep.acast_episodeId || '';
   state.episode.title = ep.title || '';
