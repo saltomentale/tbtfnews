@@ -23,10 +23,10 @@ async function fetchRssAsJson(rssUrl) {
   // allorigins /get wraps the body in JSON and reliably sends CORS headers (unlike /raw)
   // codetabs is a raw proxy with no size limit issues
   const proxies = [
-    {
-      url: `https://api.allorigins.win/get?url=${encodeURIComponent(rssUrl)}`,
-      getText: async (res) => (await res.json()).contents
-    },
+    // {
+    //   url: `https://api.allorigins.win/get?url=${encodeURIComponent(rssUrl)}`,
+    //   getText: async (res) => (await res.json()).contents
+    // },
     {
       url: `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(rssUrl)}`,
       getText: (res) => res.text()
@@ -109,6 +109,21 @@ async function fetchRssAsJson(rssUrl) {
 }
 
 async function loadBlogs() {
+  // Try pre-fetched static file first (committed by GitHub Actions, no CORS needed)
+  try {
+    const res = await fetch('data/blogs.json');
+    if (res.ok) {
+      const cached = await res.json();
+      if (Array.isArray(cached) && cached.length > 0) {
+        state.blogs = cached.map(p => ({ ...p, date: new Date(p.pubDate) }));
+        renderBlogsPreview();
+        return;
+      }
+    }
+  } catch (e) {
+    console.warn('Could not load data/blogs.json, falling back to proxy', e);
+  }
+
   const allPosts = [];
   const now = new Date();
 
@@ -119,7 +134,6 @@ async function loadBlogs() {
     data.items.forEach(item => {
       const date = new Date(item.pubDate);
       const diff = (now - date) / (1000 * 60 * 60 * 24);
-      console.log(feed, item.title, date, diff);
 
       if (diff <= 7) {
         allPosts.push({
@@ -128,7 +142,7 @@ async function loadBlogs() {
           excerpt: item.description,
           author: feed.author,
           img: feed.img,
-          date: date // Store date for sorting
+          date: date
         });
       }
     });
