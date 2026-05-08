@@ -36,7 +36,11 @@ DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "data")
 # ---------------------------------------------------------------------------
 
 def fetch_xml(url):
-    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+    headers = {
+        "User-Agent": "Mozilla/5.0 (compatible; RSS-fetcher/1.0)",
+        "Accept": "application/rss+xml, application/xml, text/xml, */*",
+    }
+    req = urllib.request.Request(url, headers=headers)
     with urllib.request.urlopen(req, timeout=30) as response:
         return response.read()
 
