@@ -43,7 +43,7 @@ async function fetchRssAsJson(rssUrl) {
 
   for (const proxy of proxies) {
     try {
-      const res = await fetch(proxy.url);
+      const res = await fetch(proxy.url, { signal: AbortSignal.timeout(5000) });
       if (!res.ok) continue;
       
       const text = await proxy.getText(res);
@@ -109,7 +109,48 @@ async function fetchRssAsJson(rssUrl) {
 }
 
 async function loadBlogs() {
-  // Try pre-fetched static file first (committed by GitHub Actions, no CORS needed)
+  // Try live CORS feeds first (always fresh); fall back to static blogs.json if all
+  // proxies fail or take too long.
+  let corsBlogs = null;
+
+  try {
+    corsBlogs = await Promise.race([
+      (async () => {
+        const allPosts = [];
+        const now = new Date();
+        for (const feed of FEEDS) {
+          const data = await fetchRssAsJson(feed.url);
+          if (!data || !data.items) continue;
+          data.items.forEach(item => {
+            const date = new Date(item.pubDate);
+            if ((now - date) / (1000 * 60 * 60 * 24) <= 7) {
+              allPosts.push({
+                title: item.title,
+                link: item.link,
+                excerpt: item.description,
+                author: feed.author,
+                img: feed.img,
+                date
+              });
+            }
+          });
+        }
+        allPosts.sort((a, b) => b.date - a.date);
+        return allPosts.slice(0, 6);
+      })(),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('Blog feed timeout')), 10000))
+    ]);
+  } catch (e) {
+    console.warn('Live blog fetch failed or timed out:', e.message);
+  }
+
+  if (corsBlogs && corsBlogs.length > 0) {
+    state.blogs = corsBlogs;
+    renderBlogsPreview();
+    return;
+  }
+
+  // Fall back to pre-fetched static file committed by GitHub Actions
   try {
     const res = await fetch('data/blogs.json');
     if (res.ok) {
@@ -121,38 +162,8 @@ async function loadBlogs() {
       }
     }
   } catch (e) {
-    console.warn('Could not load data/blogs.json, falling back to proxy', e);
+    console.warn('Could not load data/blogs.json', e);
   }
-
-  const allPosts = [];
-  const now = new Date();
-
-  for (const feed of FEEDS) {
-    const data = await fetchRssAsJson(feed.url);
-    if (!data || !data.items) continue;
-
-    data.items.forEach(item => {
-      const date = new Date(item.pubDate);
-      const diff = (now - date) / (1000 * 60 * 60 * 24);
-
-      if (diff <= 7) {
-        allPosts.push({
-          title: item.title,
-          link: item.link,
-          excerpt: item.description,
-          author: feed.author,
-          img: feed.img,
-          date: date
-        });
-      }
-    });
-  }
-
-  // Sort by date from newer to older
-  allPosts.sort((a, b) => b.date - a.date);
-
-  state.blogs = allPosts.slice(0, 6);
-  renderBlogsPreview();
 }
 
 
