@@ -113,6 +113,7 @@ def fetch_blogs(max_age_days=7, max_posts=6):
     now = datetime.now(timezone.utc)
     cutoff = now - timedelta(days=max_age_days)
     all_posts = []
+    failed = 0
 
     for feed in BLOG_FEEDS:
         print(f"Fetching blog feed: {feed['url']} ...")
@@ -120,6 +121,7 @@ def fetch_blogs(max_age_days=7, max_posts=6):
             root = ET.fromstring(fetch_xml(feed["url"]))
         except Exception as e:
             print(f"  WARNING: failed to fetch {feed['url']}: {e}")
+            failed += 1
             continue
 
         for item in root.iter("item"):
@@ -143,6 +145,11 @@ def fetch_blogs(max_age_days=7, max_posts=6):
                 "img": feed["img"],
                 "pubDate": dt.isoformat(),
             })
+
+    if failed == len(BLOG_FEEDS):
+        raise RuntimeError(
+            f"All {len(BLOG_FEEDS)} blog feeds failed to fetch — not overwriting blogs.json"
+        )
 
     all_posts.sort(key=lambda p: p["pubDate"], reverse=True)
     return all_posts[:max_posts]
